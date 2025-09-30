@@ -39,6 +39,7 @@ import { UserMiddleware } from "./shared/middleware/user.middleware";
 import { EmailModule } from "./shared/services/email.module";
 import { SharedModule } from "./shared/shared.module";
 import enviromentValidation from "./shared/validations/env.validation";
+import { UnifiedDataModule } from "./unified-data";
 import { UserModule } from "./users/users.module";
 const ENV = process.env.NODE_ENV;
 @Module({
@@ -63,6 +64,7 @@ const ENV = process.env.NODE_ENV;
     SectionDoctorsModule,
     CategoryModule,
     SubCategoryModule,
+    UnifiedDataModule,
     AuthModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "uploads"),
