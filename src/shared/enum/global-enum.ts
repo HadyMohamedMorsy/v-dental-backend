@@ -15,7 +15,6 @@ export enum UserStatus {
   USER = "user",
 }
 
-
 export enum Role {
   CEO = "CEO",
   ANALYST = "ANALYST",
@@ -39,12 +38,10 @@ export enum Role {
   TECH_SUPPORT = "TECH_SUPPORT",
 }
 
-
 export enum CategoryType {
   PRODUCT = "product",
   BLOG = "blog",
 }
-
 
 export enum ArticleType {
   ARTICLE = "article",
