@@ -61,9 +61,6 @@ export class UploadsController {
   uploadSingleFile(
     @UploadedFile(
       new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: /^(image\/jpe?g|image\/jpg|image\/png|image\/webp|image\/svg\+xml)$/i,
-        })
         .addMaxSizeValidator({
           maxSize: 10485760, // 10MB (قبل الضغط)
         })

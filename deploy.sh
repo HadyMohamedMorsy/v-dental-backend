@@ -5,7 +5,7 @@ SERVER="root@72.60.92.164"
 BACKEND_DIR="/var/www/v-dental-clinic/backend"
 TARGET_DIR="$BACKEND_DIR/dist"
 LOCAL_DIR="./dist"
-APP_NAME="v-dental-clinic"
+APP_NAME="v-dental"
 
 echo "Starting backend deployment to $SERVER:$TARGET_DIR"
 
