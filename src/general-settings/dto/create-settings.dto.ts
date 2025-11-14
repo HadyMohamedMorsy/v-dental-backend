@@ -1,21 +1,110 @@
-import { IsBoolean, IsEmail, IsOptional, IsString, MaxLength } from "class-validator";
+import { Type } from "class-transformer";
+import {
+  IsArray,
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from "class-validator";
 import { User } from "src/users/user.entity";
 
+class ContentItemDto {
+  @IsString()
+  @IsOptional()
+  store_name?: string;
+
+  @IsString()
+  @IsOptional()
+  store_address?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_title?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_favicon?: string;
+
+  @IsString()
+  @IsOptional()
+  logo?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_description?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_keywords?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_author?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_robots?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_canonical?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_image?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_og_title?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_og_description?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_og_image?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_og_url?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_og_type?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_og_locale?: string;
+
+  @IsString()
+  @IsOptional()
+  meta_og_site_name?: string;
+
+  @IsNumber()
+  @IsOptional()
+  language_id?: number;
+}
+
 export class CreateGeneralSettingsDto {
-  // Basic Information
-  @IsString()
+  // Store Information
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ContentItemDto)
   @IsOptional()
-  name?: string;
-
-  @IsEmail()
-  @IsOptional()
-  email?: string;
+  content?: ContentItemDto[];
 
   @IsString()
   @IsOptional()
-  phone?: string;
+  store_email?: string;
 
-  // Analytics
+  @IsString()
+  @IsOptional()
+  store_phone?: string;
+
+  // Google Tag Manager
   @IsString()
   @IsOptional()
   gtm_container_id?: string;
@@ -36,7 +125,10 @@ export class CreateGeneralSettingsDto {
   @IsOptional()
   init_tiktok_id?: string;
 
-  // Analytics Enable/Disable
+  @IsBoolean()
+  @IsOptional()
+  gtm_enabled?: boolean;
+
   @IsBoolean()
   @IsOptional()
   google_analytics_enabled?: boolean;
@@ -62,20 +154,9 @@ export class CreateGeneralSettingsDto {
   @IsOptional()
   instagram_url?: string;
 
-  // SEO Settings
-  @IsString()
-  @MaxLength(60)
-  @IsOptional()
-  meta_title?: string;
-
-  @IsString()
-  @MaxLength(160)
-  @IsOptional()
-  meta_description?: string;
-
   @IsString()
   @IsOptional()
-  meta_keywords?: string;
+  tiktok_url?: string;
 
   createdBy: User;
 }

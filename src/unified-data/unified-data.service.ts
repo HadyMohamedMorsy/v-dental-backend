@@ -65,14 +65,16 @@ export class UnifiedDataService {
   }
 
   private async getGeneralSettings() {
-    try {
-      const settings = await this.generalSettingsService.findAll({});
-      if (settings && settings.data && settings.data.length > 0) {
-        return { content: settings.data[0] };
+    const settings = await this.generalSettingsService.findAll({});
+    if (settings && settings.data && settings.data.length > 0) {
+      const settingsData = settings.data[0];
+      if (settingsData.content && Array.isArray(settingsData.content)) {
+        settingsData.content = settingsData.content.map(item => ({
+          ...item,
+          language_id: item.language_id || null,
+        }));
       }
-      return { content: null };
-    } catch {
-      return { content: null };
+      return settingsData;
     }
   }
 }
