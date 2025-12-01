@@ -11,7 +11,7 @@ export class Category extends BaseMemberEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: "content", type: "json" })
+  @Column({ name: "content", type: "json", nullable: true })
   content: Array<{
     name: string;
     description: string;

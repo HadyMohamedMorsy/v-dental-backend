@@ -29,7 +29,7 @@ export class Blog extends BaseMemberEntity {
   @Column({ name: "end_date", type: "timestamp", nullable: true })
   endDate: string | null;
 
-  @Column({ name: "content", type: "json" })
+  @Column({ name: "content", type: "json", nullable: true })
   content: Array<{
     title: string;
     description: string;

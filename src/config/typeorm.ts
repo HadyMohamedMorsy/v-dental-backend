@@ -1,6 +1,10 @@
-import { ConfigService, registerAs } from "@nestjs/config";
+// Register tsconfig-paths before any other imports to resolve path aliases
+import "tsconfig-paths/register";
+
+import { ConfigService } from "@nestjs/config";
 import { config as dotenvConfig } from "dotenv";
 import { DataSource, DataSourceOptions } from "typeorm";
+
 dotenvConfig({ path: ".env.pro" });
 
 const configService = new ConfigService();
@@ -12,9 +16,10 @@ const config = {
   password: configService.get<string>("DATABASE_PASSWORD"),
   database: configService.get<string>("DATABASE_NAME"),
   synchronize: false,
-  entities: ["/src/**/*.entity{.ts,.js}"],
-  migrations: ["/src/migrations/*{.ts,.js}"],
+  entities: [__dirname + "/../**/*.entity{.ts,.js}"],
+  migrations: [__dirname + "/../migrations/*{.ts,.js}"],
 };
 
-export default registerAs("typeorm", () => config);
-export const connectionSource = new DataSource(config as DataSourceOptions);
+// Create and export DataSource instance as default
+// TypeORM CLI requires exactly ONE default export of DataSource
+export default new DataSource(config as DataSourceOptions);
