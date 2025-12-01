@@ -21,12 +21,10 @@ export class SubCategoryController
       id: true,
       created_at: true,
       updated_at: true,
-      name: true,
-      description: true,
+      content: true,
       image: true,
       categoryType: true,
       slug: true,
-      icon: true,
     };
   }
 
@@ -49,13 +47,11 @@ export class SubCategoryController
   public create(@Body() create: SubCategoryDto, @Req() req: Request) {
     return this.service.create(
       {
-        name: create.name,
-        description: create.description,
+        content: create.content,
         image: create.image,
         categoryType: create.categoryType,
         category: req["category"],
         slug: create.slug,
-        icon: create.icon,
         createdBy: req["createdBy"],
       } as SubCategoryDto,
       this.selectOptions(),
@@ -69,13 +65,11 @@ export class SubCategoryController
     return await this.service.update(
       {
         id: update.id,
-        name: update.name,
-        description: update.description,
+        content: update.content,
         image: update.image,
         categoryType: update.categoryType,
         category: req["category"],
         slug: update.slug,
-        icon: update.icon,
         createdBy: req["createdBy"],
       },
       this.selectOptions(),

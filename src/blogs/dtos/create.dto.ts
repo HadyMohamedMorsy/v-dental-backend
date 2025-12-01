@@ -45,12 +45,15 @@ export class BlogDto {
   endDate?: string | null;
 
   @IsNotEmpty()
-  @IsString()
-  title: string;
-
-  @IsOptional()
-  @IsString()
-  subTitle?: string;
+  content: Array<{
+    title: string;
+    description: string;
+    subTitle: string;
+    shortDescription: string;
+    metaTitle: string;
+    metaDescription: string;
+    language_id: number;
+  }>;
 
   @IsNotEmpty()
   @IsString()
@@ -59,22 +62,6 @@ export class BlogDto {
   @IsNotEmpty()
   @IsString()
   slug: string;
-
-  @IsNotEmpty()
-  @IsString()
-  description: string;
-
-  @IsOptional()
-  @IsString()
-  shortDescription?: string;
-
-  @IsOptional()
-  @IsString()
-  metaTitle?: string | null;
-
-  @IsOptional()
-  @IsString()
-  metaDescription?: string;
 
   @IsOptional()
   @IsArray()

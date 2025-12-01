@@ -58,6 +58,8 @@ export class SectionReviewsContentDto {
 export class SectionReviewsUpdateContentDto {
   // ID for updates
   @IsNumber()
+  @IsOptional()
+  @Type(() => Number)
   id: number;
 
   // Language ID

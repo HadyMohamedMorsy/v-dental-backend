@@ -8,7 +8,7 @@ import { APIFeaturesService } from "src/shared/filters/filter.service";
 import { ICrudService } from "src/shared/interfaces/crud-service.interface";
 import { Repository, SelectQueryBuilder } from "typeorm";
 import { Blog } from "./blog.entity";
-import { BlogDto, BlogFilterDto, BlogSortOrder } from "./dtos/create.dto";
+import { BlogDto, BlogFilterDto } from "./dtos/create.dto";
 import { PatchBlogDto } from "./dtos/patch.dto";
 
 @Injectable()
@@ -32,9 +32,8 @@ export class BlogsService
     filteredRecord?: any,
   ): void {
     super.queryRelationIndex(queryBuilder, filteredRecord);
-    queryBuilder
-      .leftJoin("e.categories", "categories")
-      .addSelect(["categories.id", "categories.name"]);
+    queryBuilder.leftJoin("e.categories", "categories");
+    queryBuilder.addSelect(["categories.id", "categories.content"]);
   }
 
   async updateBlog(
@@ -45,14 +44,7 @@ export class BlogsService
     const blog = updateDto.blog;
 
     Object.assign(blog, {
-      title: updateDto.title,
-      subTitle: updateDto.subTitle,
-      postType: updateDto.postType,
-      slug: updateDto.slug,
-      description: updateDto.description,
-      shortDescription: updateDto.shortDescription,
-      metaTitle: updateDto.metaTitle,
-      metaDescription: updateDto.metaDescription,
+      content: updateDto.content,
       featuredImages: updateDto.featuredImages,
       thumb: updateDto.thumb,
       mediaType: updateDto.mediaType,
@@ -96,20 +88,15 @@ export class BlogsService
       select: {
         id: true,
         createdAt: true,
-        title: true,
-        description: true,
-        subTitle: true,
-        postType: true,
-        slug: true,
-        startDate: true,
-        endDate: true,
-        shortDescription: true,
-        metaTitle: true,
-        metaDescription: true,
+        content: true,
         featuredImages: true,
         thumb: true,
-        mediaType: true,
-        views: true,
+        video: true,
+        isFeatured: true,
+        isPublished: true,
+        startDate: true,
+        endDate: true,
+        order: true,
         createdBy: {
           id: true,
           firstName: true,
@@ -117,7 +104,7 @@ export class BlogsService
         },
         categories: {
           id: true,
-          name: true,
+          slug: true,
         },
       },
     });
@@ -130,7 +117,7 @@ export class BlogsService
     const relatedBlogs = await this.repository
       .createQueryBuilder("blog")
       .leftJoin("blog.categories", "categories")
-      .addSelect(["categories.id", "categories.name"])
+      .addSelect(["categories.id", "categories.content"])
       .leftJoin("blog.createdBy", "createdBy")
       .addSelect(["createdBy.id", "createdBy.firstName", "createdBy.lastName"])
       .where("blog.id != :currentBlogId", { currentBlogId: blog.id })
@@ -179,8 +166,6 @@ export class BlogsService
       search,
       length = 10,
       start = 0,
-      sort = BlogSortOrder.DESC,
-      sortBy = "createdAt",
     } = filterDto;
 
     const queryBuilder = this.buildFilterQuery(
@@ -191,7 +176,7 @@ export class BlogsService
       mediaType,
       search,
     );
-    this.applyRelationsAndPagination(queryBuilder, start, length, sort, sortBy);
+    this.applyRelationsAndPagination(queryBuilder, start, length);
 
     const [data, totalRecords] = await queryBuilder.getManyAndCount();
     return this.response(data, totalRecords);
@@ -267,13 +252,7 @@ export class BlogsService
     }
   }
 
-  private applyRelationsAndPagination(
-    queryBuilder: any,
-    start: number,
-    length: number,
-    sort: BlogSortOrder = BlogSortOrder.DESC,
-    sortBy: string = "createdAt",
-  ) {
+  private applyRelationsAndPagination(queryBuilder: any, start: number, length: number) {
     this.queryRelationIndex(queryBuilder);
     queryBuilder
       .addSelect([
@@ -281,9 +260,8 @@ export class BlogsService
         "createdBy.firstName",
         "createdBy.lastName",
         "categories.id",
-        "categories.name",
+        "categories.content",
       ])
-      .orderBy(`e.${sortBy}`, sort.toUpperCase())
       .skip(start)
       .take(length);
   }

@@ -11,14 +11,15 @@ export class Category extends BaseMemberEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("varchar")
-  name: string;
+  @Column({ name: "content", type: "json" })
+  content: Array<{
+    name: string;
+    description: string;
+    language_id: number;
+  }>;
 
   @Column("varchar", { nullable: true, unique: true })
   slug: string;
-
-  @Column("varchar", { nullable: true })
-  icon: string;
 
   @Column({
     type: "enum",
@@ -27,10 +28,6 @@ export class Category extends BaseMemberEntity {
     name: "category_type",
   })
   categoryType: CategoryType;
-
-  @Column("varchar", { nullable: true })
-  description: string;
-
 
   @ManyToMany(() => Blog, blog => blog.categories)
   blogs: Blog[];

@@ -1,8 +1,6 @@
-
 // list.service.ts
 import { Injectable } from "@nestjs/common";
 import { CategoryService } from "src/categories/category.service";
-import { CategoryType } from "../enum/global-enum";
 import {
   getArticleTypeList,
   getCategoryTypeList,
@@ -12,9 +10,7 @@ import {
 
 @Injectable()
 export class ListService {
-  constructor(
-    private readonly categoryService: CategoryService,
-  ) {}
+  constructor(private readonly categoryService: CategoryService) {}
   private lists = {
     roles: getRoleList(),
     mediaType: getMediaTypeList(),
@@ -30,9 +26,7 @@ export class ListService {
         };
       case "blog":
         return {
-          category: await this.categoryService.getCategoriesByType(CategoryType.BLOG),
-          mediaType: this.lists.mediaType,
-          articleType: this.lists.articleType,
+          categories: await this.categoryService.getList(),
         };
 
       default:

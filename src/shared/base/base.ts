@@ -88,12 +88,21 @@ export abstract class BaseService<T, CreateDto, UpdateDto>
       const updatedRecords: T[] = [];
 
       for (const contentItem of updateDto) {
-        const { language_id, ...itemWithLanguage } = contentItem;
+        const { language_id, ...itemWithoutLanguage } = contentItem;
         const language = await this.languageService.findOne(language_id);
-        const itemWithLanguageAndLanguage = { ...itemWithLanguage, language };
-        await this.repository.update(contentItem.id, itemWithLanguageAndLanguage as any);
-        const fullRecord = await this.findOne(contentItem.id, selectOptions, relations);
-        updatedRecords.push(fullRecord);
+        const itemWithLanguageAndLanguage = { ...itemWithoutLanguage, language };
+
+        // لو فيه id نعمل update، لو مفيش id نعمل create جديد
+        if (contentItem.id) {
+          await this.repository.update(contentItem.id, itemWithLanguageAndLanguage as any);
+          const fullRecord = await this.findOne(contentItem.id, selectOptions, relations);
+          updatedRecords.push(fullRecord);
+        } else {
+          const newEntity = this.repository.create(itemWithLanguageAndLanguage as any);
+          const saved = (await this.repository.save(newEntity)) as T & { id: number };
+          const fullRecord = await this.findOne(saved.id, selectOptions, relations);
+          updatedRecords.push(fullRecord);
+        }
       }
 
       return updatedRecords[0];
@@ -115,9 +124,18 @@ export abstract class BaseService<T, CreateDto, UpdateDto>
         let itemWithLanguage = contentItem;
         const language = await this.languageService.findOne(contentItem.language_id);
         itemWithLanguage = { ...contentItem, language };
-        await this.repository.update(contentItem.id, itemWithLanguage as any);
-        const fullRecord = await this.findOne(contentItem.id, selectOptions, relations);
-        updatedRecords.push(fullRecord);
+
+        // لو فيه id نعمل update، لو مفيش id نعمل create جديد
+        if (contentItem.id) {
+          await this.repository.update(contentItem.id, itemWithLanguage as any);
+          const fullRecord = await this.findOne(contentItem.id, selectOptions, relations);
+          updatedRecords.push(fullRecord);
+        } else {
+          const newEntity = this.repository.create(itemWithLanguage as any);
+          const saved = (await this.repository.save(newEntity)) as T & { id: number };
+          const fullRecord = await this.findOne(saved.id, selectOptions, relations);
+          updatedRecords.push(fullRecord);
+        }
       }
       return updatedRecords;
     }
@@ -208,7 +226,6 @@ export abstract class BaseService<T, CreateDto, UpdateDto>
     };
   }): Promise<any> {
     const queryParams = query.query;
-
     let queryBuilder = this.repository.createQueryBuilder("e");
     queryBuilder = this.applySearch(queryBuilder, queryParams?.search || "");
     queryBuilder = this.applyFilters(

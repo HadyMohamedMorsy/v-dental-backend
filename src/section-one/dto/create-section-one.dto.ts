@@ -24,6 +24,10 @@ export class AvailableDoctorDto {
 }
 
 export class SectionOneContentDto {
+  @IsNumber()
+  @IsOptional()
+  id?: number;
+
   // Language ID
   @IsNumber()
   language_id: number;
@@ -79,10 +83,13 @@ export class SectionOneContentDto {
 export class SectionOneUpdateContentDto {
   // ID for updates
   @IsNumber()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   // Language ID
   @IsNumber()
+  @Type(() => Number)
   language_id: number;
 
   // Main headline

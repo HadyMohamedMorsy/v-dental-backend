@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, HttpCode, Post } from "@nestjs/common";
 import { Auth } from "../decorators/auth.decorator";
 import { Roles } from "../decorators/roles.decorator";
 import { AuthType } from "../enum/global-enum";
@@ -8,10 +8,10 @@ import { BaseService } from "./base";
 export abstract class BaseController<T, CreateDto, UpdateDto> {
   constructor(protected readonly service: BaseService<T, CreateDto, UpdateDto>) {}
 
-  @Get("/front")
+  @Post("/front")
   @HttpCode(200)
   @Auth(AuthType.None)
-  public async findAll(@Query() query: any) {
+  public async findAll(@Body() query: any) {
     return await this.service.findFront(query);
   }
 

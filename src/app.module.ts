@@ -48,6 +48,8 @@ const ENV = process.env.NODE_ENV;
     EmailModule,
     UploadsModule,
     FilterDateModule,
+    CategoryModule,
+    SubCategoryModule,
     UserModule,
     BlogModule,
     ContactModule,

@@ -53,6 +53,8 @@ export class SectionFiveContentDto {
 export class SectionFiveUpdateContentDto {
   // ID for updates
   @IsNumber()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   // Language ID

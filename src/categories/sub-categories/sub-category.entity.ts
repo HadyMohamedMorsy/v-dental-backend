@@ -10,17 +10,15 @@ export class SubCategory extends BaseMemberEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: "varchar",
-    length: 255,
-  })
-  name: string;
+  @Column({ name: "content", type: "json" })
+  content: Array<{
+    name: string;
+    description: string;
+    language_id: number;
+  }>;
 
   @Column("varchar", { nullable: true, unique: true })
   slug: string;
-
-  @Column("varchar", { nullable: true })
-  icon: string;
 
   @Column({
     type: "enum",
@@ -29,12 +27,6 @@ export class SubCategory extends BaseMemberEntity {
     name: "category_type",
   })
   categoryType: CategoryType;
-
-  @Column({
-    type: "text",
-    nullable: true,
-  })
-  description: string;
 
   @ManyToOne(() => Category, category => category.subCategories, { onDelete: "CASCADE" })
   category: Category;

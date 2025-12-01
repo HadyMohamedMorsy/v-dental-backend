@@ -24,6 +24,11 @@ export class BranchDto {
 }
 
 export class SectionBranchesContentDto {
+  @IsNumber()
+  @Type(() => Number)
+  @IsOptional()
+  id: number;
+
   // Language ID
   @IsNumber()
   language_id: number;

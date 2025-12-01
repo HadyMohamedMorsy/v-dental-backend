@@ -11,6 +11,11 @@ import {
 import { User } from "src/users/user.entity";
 
 export class FeatureDto {
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  id?: number;
+
   @IsString()
   @MaxLength(100)
   title: string;
@@ -73,6 +78,8 @@ export class SectionFourContentDto {
 export class SectionFourUpdateContentDto {
   // ID for updates
   @IsNumber()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   // Language ID

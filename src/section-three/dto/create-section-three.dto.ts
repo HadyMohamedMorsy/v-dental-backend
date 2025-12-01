@@ -11,6 +11,11 @@ import {
 import { User } from "src/users/user.entity";
 
 export class SectionThreeContentDto {
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  id?: number;
+
   // Language ID
   @IsNumber()
   language_id: number;
@@ -52,6 +57,8 @@ export class SectionThreeContentDto {
 export class SectionThreeUpdateContentDto {
   // ID for updates
   @IsNumber()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   // Language ID

@@ -41,6 +41,8 @@ export class SectionTwoContentDto {
 export class SectionTwoUpdateContentDto {
   // ID for updates
   @IsNumber()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   // Language ID

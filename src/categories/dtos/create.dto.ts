@@ -1,12 +1,15 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { CategoryType } from "src/shared/enum/global-enum";
 import { User } from "src/users/user.entity";
 
 export class CategoryDto {
-  @IsString()
   @IsNotEmpty()
-  @MaxLength(255)
-  name: string;
+  content: Array<{
+    name: string;
+    description: string;
+    language_id: number;
+  }>;
 
   @IsEnum(CategoryType)
   @IsNotEmpty()
@@ -20,13 +23,15 @@ export class CategoryDto {
   @IsOptional()
   icon?: string;
 
-  @IsString()
-  @IsOptional()
-  description?: string;
-
   @IsOptional()
   @IsString()
   image?: string;
+
+  @IsArray()
+  @Type(() => Number)
+  @IsNumber({}, { each: true })
+  @IsOptional()
+  countryIds?: number[];
 
   createdBy: User;
 }

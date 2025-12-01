@@ -1,13 +1,15 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { Category } from "src/categories/category.entity";
 import { CategoryType } from "src/shared/enum/global-enum";
 import { User } from "src/users/user.entity";
 
 export class SubCategoryDto {
-  @IsString()
   @IsNotEmpty()
-  @MaxLength(255)
-  name: string;
+  content: Array<{
+    name: string;
+    description: string;
+    language_id: number;
+  }>;
 
   @IsNumber()
   @IsNotEmpty()
@@ -17,17 +19,9 @@ export class SubCategoryDto {
   @IsNotEmpty()
   slug: string;
 
-  @IsString()
-  @IsOptional()
-  icon?: string;
-
   @IsEnum(CategoryType)
   @IsNotEmpty()
   categoryType: CategoryType;
-
-  @IsString()
-  @IsOptional()
-  description?: string;
 
   @IsOptional()
   @IsString()

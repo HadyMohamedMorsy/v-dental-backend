@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { LanguageService } from "src/language/language.service";
 import { BaseService } from "src/shared/base/base";
 import { APIFeaturesService } from "src/shared/filters/filter.service";
 import { ICrudService } from "src/shared/interfaces/crud-service.interface";
@@ -18,9 +17,8 @@ export class SubCategoryService
     apiFeaturesService: APIFeaturesService,
     @InjectRepository(SubCategory)
     repository: Repository<SubCategory>,
-    protected readonly languageService: LanguageService,
   ) {
-    super(repository, apiFeaturesService, languageService);
+    super(repository, apiFeaturesService);
   }
 
   override queryRelationIndex(queryBuilder?: SelectQueryBuilder<any>, filteredRecord?: any) {

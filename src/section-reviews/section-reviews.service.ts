@@ -43,7 +43,7 @@ export class SectionReviewsService
       },
     });
     if (sections && sections.data && sections.data.length > 0) {
-      return { content: [{ ...sections.data[0], language_id: sections.data[0].language.id }] };
+      return { content: sections.data.map(item => ({ ...item, language_id: item.language.id })) };
     }
     return { content: null };
   }

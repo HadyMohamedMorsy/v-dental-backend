@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { LanguageService } from "src/language/language.service";
 import { BaseService } from "src/shared/base/base";
 import { CategoryType } from "src/shared/enum/global-enum";
 import { APIFeaturesService } from "src/shared/filters/filter.service";
@@ -19,21 +18,8 @@ export class CategoryService
     apiFeaturesService: APIFeaturesService,
     @InjectRepository(Category)
     repository: Repository<Category>,
-    protected readonly languageService: LanguageService,
   ) {
-    super(repository, apiFeaturesService, languageService);
-  }
-
-  async getCategoriesByType(type: CategoryType) {
-    const categories = await this.repository.find({
-      where: { categoryType: type },
-      select: ["id", "name"],
-    });
-
-    return categories.map(category => ({
-      label: category.name,
-      value: category.id,
-    }));
+    super(repository, apiFeaturesService);
   }
 
   override async delete({ id }: any) {
@@ -57,5 +43,40 @@ export class CategoryService
     // مسح الـ category نهائياً
     await this.repository.remove(category);
     return { deleted: true, id };
+  }
+
+  async getParentCategories() {
+    const categories = await this.repository.find({
+      where: {
+        categoryType: CategoryType.BLOG,
+      },
+      select: {
+        id: true,
+        content: true,
+        slug: true,
+        image: true,
+        categoryType: true,
+      },
+      relations: ["blogs"],
+    });
+
+    const result = categories.map(category => {
+      // Count only published blogs
+      const blogCount = category.blogs
+        ? category.blogs.filter(blog => blog.isPublished === true).length
+        : 0;
+
+      // Remove blogs relation from response, keep only count
+      const { blogs, ...categoryData } = category;
+      return {
+        ...categoryData,
+        blogCount,
+      };
+    });
+
+    return {
+      data: result,
+      total: result.length,
+    };
   }
 }

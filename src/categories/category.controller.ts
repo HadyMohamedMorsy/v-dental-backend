@@ -23,12 +23,10 @@ export class CategoryController
       id: true,
       created_at: true,
       updated_at: true,
-      name: true,
-      description: true,
+      content: true,
       categoryType: true,
       image: true,
       slug: true,
-      icon: true,
     };
   }
 
@@ -44,55 +42,38 @@ export class CategoryController
 
   @Post("/store")
   @Roles("CEO", "TECH_SUPPORT", "STORE_MANAGER", "SUPER_ADMIN", "CONTENT_MANAGER", "SYSTEM_ADMIN")
-  public create(@Body() create: CategoryDto, @Req() req: Request) {
-    return this.service.create(
+  public async create(@Body() create: CategoryDto, @Req() req: Request) {
+    const category = await this.service.create(
       {
-        name: create.name,
-        description: create.description,
+        content: create.content,
         categoryType: create.categoryType,
         image: create.image,
         slug: create.slug,
-        icon: create.icon,
         createdBy: req["createdBy"],
       },
       this.selectOptions(),
       this.getRelationOptions(),
     );
+
+    return category;
   }
 
   @Put("/update")
   @Roles("CEO", "TECH_SUPPORT", "STORE_MANAGER", "SUPER_ADMIN", "CONTENT_MANAGER", "SYSTEM_ADMIN")
   public async update(@Body() update: PatchCategoryDto, @Req() req: Request) {
-    return await this.service.update(
+    const category = await this.service.update(
       {
         id: update.id,
-        name: update.name,
-        description: update.description,
+        content: update.content,
         categoryType: update.categoryType,
         image: update.image,
         slug: update.slug,
-        icon: update.icon,
         createdBy: req["updatedBy"],
       },
       this.selectOptions(),
       this.getRelationOptions(),
     );
-  }
-
-  @Get("/product")
-  @Auth(AuthType.None)
-  public async getProductCategories() {
-    return await this.service.findFront({
-      query: {
-        filters: { categoryType: CategoryType.PRODUCT },
-        relations: {
-          subCategories: {
-            select: ["id", "name", "slug", "icon", "image", "description"],
-          },
-        },
-        isPagination: "false",
-      },
-    });
+    return category;
   }
 
   @Get("/blog")
@@ -103,11 +84,17 @@ export class CategoryController
         filters: { categoryType: CategoryType.BLOG },
         relations: {
           subCategories: {
-            select: ["id", "name", "slug", "icon", "image", "description"],
+            select: ["id", "name", "slug", "image", "description"],
           },
         },
         isPagination: "false",
       },
     });
+  }
+
+  @Get("/parent")
+  @Auth(AuthType.None)
+  public async getParentCategories() {
+    return await this.service.getParentCategories();
   }
 }

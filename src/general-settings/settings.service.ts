@@ -60,4 +60,24 @@ export class GeneralSettingsService
     }
     return null;
   }
+
+  // Get General Settings for frontend
+  public async getGeneralSettings() {
+    const settings = await this.findAll({});
+    if (settings && settings.data && settings.data.length > 0) {
+      const settingsData = settings.data[0];
+      if (settingsData.content && Array.isArray(settingsData.content)) {
+        settingsData.content = settingsData.content.map(item => ({
+          ...item,
+          language_id: item.language_id || null,
+        }));
+      }
+      return {
+        data: settingsData,
+      };
+    }
+    return {
+      data: null,
+    };
+  }
 }

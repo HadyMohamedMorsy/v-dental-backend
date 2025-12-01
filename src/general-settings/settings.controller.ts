@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpCode, Post, Put, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Post, Put, Req } from "@nestjs/common";
 import { Auth } from "src/shared/decorators/auth.decorator";
 import { Roles } from "src/shared/decorators/roles.decorator";
 import { AuthType, Role } from "src/shared/enum/global-enum";
@@ -43,6 +43,12 @@ export class GeneralSettingsController implements SelectOptions, RelationOptions
         lastName: true,
       },
     };
+  }
+
+  @Get("/front")
+  @Auth(AuthType.None)
+  async getGeneralSettings() {
+    return await this.service.getGeneralSettings();
   }
 
   @Post("/index")

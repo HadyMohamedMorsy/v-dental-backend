@@ -29,29 +29,22 @@ export class Blog extends BaseMemberEntity {
   @Column({ name: "end_date", type: "timestamp", nullable: true })
   endDate: string | null;
 
-  @Column()
-  title: string;
-
-  @Column({ name: "sub_title" })
-  subTitle: string;
+  @Column({ name: "content", type: "json" })
+  content: Array<{
+    title: string;
+    description: string;
+    subTitle: string;
+    shortDescription: string;
+    metaTitle: string;
+    metaDescription: string;
+    language_id: number;
+  }>;
 
   @Column({ name: "post_type" })
   postType: string;
 
   @Column()
   slug: string;
-
-  @Column({ type: "text", nullable: true })
-  description: string;
-
-  @Column({ name: "short_description", type: "text", nullable: true })
-  shortDescription: string;
-
-  @Column({ name: "meta_title", nullable: true })
-  metaTitle: string | null;
-
-  @Column({ name: "meta_description", type: "text", nullable: true })
-  metaDescription: string;
 
   @Column({ name: "featured_images", type: "simple-array", nullable: true })
   featuredImages: string[];

@@ -36,6 +36,11 @@ export class DoctorDto {
 }
 
 export class SectionDoctorsContentDto {
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  id?: number;
+
   // Language ID
   @IsNumber()
   language_id: number;
@@ -68,6 +73,8 @@ export class SectionDoctorsContentDto {
 export class SectionDoctorsUpdateContentDto {
   // ID for updates
   @IsNumber()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   // Language ID
