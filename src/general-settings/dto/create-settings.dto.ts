@@ -2,11 +2,10 @@ import { Type } from "class-transformer";
 import {
   IsArray,
   IsBoolean,
-  IsEmail,
   IsNumber,
   IsOptional,
   IsString,
-  ValidateNested,
+  ValidateNested
 } from "class-validator";
 import { User } from "src/users/user.entity";
 
@@ -103,6 +102,10 @@ export class CreateGeneralSettingsDto {
   @IsString()
   @IsOptional()
   store_phone?: string;
+
+  @IsString()
+  @IsOptional()
+  blog_image?: string;
 
   // Google Tag Manager
   @IsString()

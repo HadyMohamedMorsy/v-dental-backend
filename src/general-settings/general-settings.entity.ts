@@ -37,6 +37,9 @@ export class GeneralSettings extends BaseMemberEntity {
   @Column({ nullable: true })
   store_phone: string;
 
+  @Column({ nullable: true })
+  blog_image: string;
+
   // Google Tag Manager
   @Column({ nullable: true })
   gtm_container_id: string;
